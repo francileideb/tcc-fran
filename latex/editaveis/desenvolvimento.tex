@@ -1,73 +1,225 @@
 \part{Desenvolvimento}
-\chapter{Desenvolvimento}
+\chapter{Arquitetura da Plataforma}
+\section{Estrutura do Projeto}
 
-\section{Desenvolvimento da Visão Geral da Plataforma em TypeScript}
-\section{Apresentação da estrutura, funcionalidades e interface planejadas para a plataforma.}
-\section{Escolhas tecnológicas e considerações de usabilidade}
+\subsection{Raiz do Projeto}
+\begin{itemize}
+\item \textbf{README.md:} Documentação do projeto em formato markdown.
+\item \textbf{pnpm-lock.yaml:} Arquivo de lock para gerenciar dependências com o gerenciador de pacotes pnpm.
+\item \textbf{middleware.ts:} Middleware utilizado para determinar se as paginas são de acesso publico ou se devem passar pela autenticação.
+\item \textbf{.env.local e .env:} Variáveis de ambiente
+\item \textbf{.gitignore:} Lista de arquivos e pastas a serem ignorados pelo Git durante o versionamento.
+\item \textbf{.git:} Pasta do repositório Git, onde são armazenados os metadados do controle de versão.
+\item \textbf{package.json:} Arquivo de configuração do Node.js que descreve o projeto e suas dependências.
+\item \textbf{components.json:} Arquivo de configuração de componentes do ShadCN UI.
+\item \textbf{tsconfig.json:} Configuração do TypeScript para o projeto.
+\item \textbf{postcss.config.js:} Configuração do PostCSS para processamento de estilos.
+\item \textbf{.eslintrc.json:} Configurações do ESLint para linting e padronização de código.
+\item \textbf{next-env.d.ts:} Declarações de tipos do Next.js para TypeScript.
+\item \textbf{tailwind.config.ts:} Configurações específicas do Tailwind CSS.
+\item \textbf{next.config.js:} Arquivo de configuração do Next.js para customizações no ambiente.
+\item \textbf{public:} Pasta de arquivos publicos como imagens utilizadas no projeto.
+\item \textbf{app:} Pasta que contém componentes, páginas e recursos relacionados à estrutura geral do aplicativo. \ref{app}
+\item \textbf{prisma:} Pasta que contem as configurações do ORM Prisma. \ref{prisma}
+\item \textbf{server:} Pasta que contem a estrutura do servidor com TRPC, autenticação e banco de dados. \ref{server}
+\end{itemize}
 
-\subsection{A implementação da autenticação OAuth 2.0}
-O OAuth 2.0 é o protocolo central que representa um pilar sólido de segurança e o gerenciamento eficaz dos acessos às sessões de TCI na plataforma. Este protocolo de autorização é fundamental para o processo, permitindo que a plataforma obtenha acesso limitado a contas de usuários em serviços HTTP sem a necessidade de enviar diretamente usuário e senha. Em essência, o usuário delega a um determinado aplicativo acesso aos seus dados em um serviço ou API específicos.\cite{OAUTH}Ao adotar o OAuth 2.0 do Google neste projeto, não apenas garante um método confiável para autenticar usuários, mas também preserva a integridade dos dados, permitindo que somente usuários autorizados tenham acesso à plataforma. Essa escolha tecnológica não só oferece solidez ao processo de autenticação, mas também acrescenta uma camada adicional de segurança ao ambiente da plataforma.
+\subsection{App}
+\label{app}
+\begin{itemize}
+\item \textbf{sign-up:} Página de cadastro.
+\item \textbf{sign-in:} Página de login.
+\item \textbf{terms-of-use:} Página de termos de uso.
+\item \textbf{privacy-policy:} Página de política de privacidade.
+\item \textbf{terapeuta:} Página do terapeuta e todos os seus componentes.
+\item \textbf{participante:} Pagina do participante e todos os seus componentes.
 
-No contexto do fluxo de autenticação, desde o redirecionamento do navegador até a obtenção e validação do token de acesso, há uma atenção especial às considerações de usabilidade. Durante o processo de login, a plataforma direciona o navegador para um URL do Google, incorporando parâmetros que indicam o tipo de acesso desejado. Nesse momento, o usuário realiza o login com a Conta do Google, seleciona a sessão e, crucialmente, concede as permissões necessárias. Após o login, o usuário é solicitado a confirmar se deseja conceder as permissões requisitadas pela plataforma. A inclusão desses elementos visa não apenas garantir a segurança, mas também oferecer uma experiência de usuário intuitiva e transparente. Abaixo uma imagem exemplificando o fluxo de autenticação realizado pelo OAuth 2.0 do Google\cite{OAUTHACESS}:
+\item \textbf{posthog:} Pasta de configuração e criação de um provider para o PostHog.
+\item \textbf{trpc:} Configuração de um cliente TRPC que possa ser utilizado tanto em componentes com renderização no servidor ou no cliente.
+\item \textbf{lib:} Funções e utilitários compartilhados.
+\item \textbf{components:} Componentes reutilizáveis.
 
-\begin{figure}[!h] % ambiente usado para inserção de imagens
+
+\item \textbf{api:} Pasta para lidar com rotas da API.
+\begin{itemize}
+\item \textbf{trpc:} Rotas TRPC específicas.
+\item \textbf{clerk:} Possível roteamento para recursos relacionados ao Clerk.
+\end{itemize}
+
+\item \textbf{layout.tsx:} Layout comum a todas as paginas, inclui o provider do PostHog, TRPC e de Autenticação.
+\item \textbf{globals.css:} Arquivo de estilos globais.
+\item \textbf{favicon.ico:} Ícone exibido na barra de título do navegador.
+\end{itemize}
+
+
+\subsection{Prisma}
+\label{prisma}
+\begin{itemize}
+\item \textbf{schema.prisma:} Arquivo de definição de modelo para o Prisma ORM.
+\end{itemize}
+
+\subsection{Server}
+\label{server}
+\begin{itemize}
+\item \textbf{routers:} Rotas relacionadas a diferentes recursos, como vídeos, grupos e usuários.
+\item \textbf{trpc.ts:} Configuração de chamadas publicas e protegidas na comunicação TRPC
+\item \textbf{index.ts:} Ponto de entrada do servidor.
+\item \textbf{db.ts:} Arquivo de configuração ou conexão com o banco de dados.
+\end{itemize}
+
+
+\section{Fluxo de autenticação OAuth 2.0}
+% \subsection{A implementação da autenticação \textit{OAuth 2.0}}
+O \textit{OAuth} 2.0 é o protocolo central que representa um pilar sólido de segurança e o gerenciamento eficaz dos acessos às sessões de TCI na plataforma. Este protocolo de autorização é fundamental para o processo, permitindo que a plataforma obtenha acesso limitado a contas de usuários em serviços \textit{Hypertext Transfer Protocol} (HTTP) sem a necessidade de enviar diretamente usuário e senha. Em essência, o usuário delega a um determinado aplicativo acesso aos seus dados em um serviço ou API específicos.\cite{OAUTH}Ao adotar o \textit{OAuth} 2.0 do Google neste projeto, não apenas garante um método confiável para autenticar usuários, mas também preserva a integridade dos dados, permitindo que somente usuários autorizados tenham acesso à plataforma. Essa escolha tecnológica não só oferece solidez ao processo de autenticação, mas também acrescenta uma camada adicional de segurança ao ambiente da plataforma.
+
+No contexto do fluxo de autenticação, desde o redirecionamento do navegador até a obtenção e validação do \textit{token} de acesso, há uma atenção especial às considerações de usabilidade. Durante o processo de login, a plataforma direciona o navegador para um \textit{Uniform Resource Locator}URL do Google, incorporando parâmetros que indicam o tipo de acesso desejado. Nesse momento, o usuário realiza o login com a Conta do Google, seleciona a sessão e, crucialmente, concede as permissões necessárias. Após o login, o usuário é solicitado a confirmar se deseja conceder as permissões requisitadas pela plataforma. A inclusão desses elementos visa não apenas garantir a segurança, mas também oferecer uma experiência de usuário intuitiva e transparente. Abaixo uma imagem exemplificando o fluxo de autenticação realizado pelo \textit{OAuth} 2.0 do Google\cite{OAUTHACESS}:
+
+\begin{figure}[!ht] % ambiente usado para inserção de imagens
     \centering
     \includegraphics[scale=0.5]{latex/figuras/oauth.pdf}
-    \caption[A implementação da autenticação OAuth 2.0]
+    \caption[Fluxo de autenticação OAuth 2.0 do Google]
     {Fluxo de autenticação realizado pelo OAuth 2.0 do Google}
 \end{figure}
 
 \pagebreak Além disso, a abordagem dos escopos provenientes do protocolo OAuth 2.0 do Google destaca-se como um componente crucial da estratégia de permissões. A inclusão desses escopos na resposta do token desempenha um papel vital para acessar recursos específicos do projeto, alinhando as escolhas tecnológicas com a usabilidade da plataforma. Dessa forma, os usuários fornecem apenas o essencial para o acesso aos recursos e funcionalidades pertencentes ao projeto, contribuindo para uma experiência mais personalizada e segura. A seguir, apresenta-se a relação de escopos provenientes do protocolo OAuth 2.0 do Google, os quais foram empregados no desenvolvimento da plataforma \cite{OAUTHSCOPES}:
 
-\item \textit{\textbf{openid}} → Associação do usuário às suas informações pessoais presentes no Google;
-\item \textit{\textbf{userinfo.email}} → Visualização do endereço de e-mail principal associado à Conta do Google;
+\begin{itemize}
+\item \textit{\textbf{openId}} → Associação do usuário às suas informações pessoais presentes no Google
+
+\item \textit{\textbf{userinfo.email}} → Visualização do endereço de e-mail principal associado à Conta do Google
+
 \item \textit{\textbf{userinfo.profile}} → Acesso e visualização de informações pessoais, incluindo aquelas disponibilizadas publicamente;
 \item \textit{\textbf{calendar}} → Permissão para gerenciar todas as agendas às quais o usuário tem acesso por meio do Google Calendar.
+\end{itemize}
 
-Os tokens de acesso são válidos somente para o conjunto de operações e recursos descritos no escopo. Por exemplo, está sendo usado na plataforma um token de acesso emitido para a API Google Calendar, ele não concederá acesso à uma API Google Contacts. O aplicativo precisa armazenar o token de atualização para uso futuro e usar o token de acesso para acessar uma API do Google. Quando o token de acesso expira, o aplicativo usa o token de atualização para conseguir um novo.
+Os \textit{tokens} de acesso são válidos somente para o conjunto de operações e recursos descritos no escopo. Por exemplo, está sendo usado na plataforma um \textit{token} de acesso emitido para a API Google Calendar, ele não concederá acesso à uma API \textit{Google Contacts}. O aplicativo precisa armazenar o \textit{token} de atualização para uso futuro e usar o \textit{token} de acesso para acessar uma API do Google. Quando o \textit{token} de acesso expira, o aplicativo usa o \textit{token} de atualização para conseguir um novo.
 
-Para complementar, a política de expiração definida para os tokens foi um tempo de 24 horas para o token de atualização e um tempo mais curto, 30 minutos, para o token de acesso, evidenciando uma consideração equilibrada de usabilidade e segurança. Essa abordagem visa não apenas a proteção contra acessos não autorizados, mas também a otimização da experiência do usuário, evitando logins frequentes.
+Para complementar, a política de expiração definida para os \textit{tokens} foi um tempo de 24 horas para o \textit{token} de atualização e um tempo mais curto, 30 minutos, para o \textit{token} de acesso, evidenciando uma consideração equilibrada de usabilidade e segurança. Essa abordagem visa não apenas a proteção contra acessos não autorizados, mas também a otimização da experiência do usuário, evitando logins frequentes.
 
-Assim, as escolhas tecnológicas incorporadas na implementação do OAuth 2.0 refletem uma busca constante por segurança robusta, ao mesmo tempo em que priorizam uma experiência do usuário coesa e eficiente na plataforma.
+Assim, as escolhas tecnológicas incorporadas na implementação do \textit{OAuth} 2.0 refletem uma busca constante por segurança robusta, ao mesmo tempo em que priorizam uma experiência do usuário coesa e eficiente na plataforma.
 
+\section{Fluxo de Desenvolvimento do Projeto}
 
-\chapter{Integração da Psicologia na Visão Geral da Plataforma}
+    No processo de construção da plataforma para facilitar o acesso aos grupos de Terapia Comunitária Integrativa Online, \textit{stories} e \textit{epics} delimitam a narrativa do projeto. \textit{Stories} são tarefas detalhadas, enquanto \textit{epics} agrupam objetivos amplos. Esse fluxo inicia-se com a definição de \textit{epics}, desdobrando-se em \textit{stories}. Abaixo, é possível visualizar as etapas de desenvolvimento do projeto:\\
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[scale=0.16]{latex/figuras/fluxojira.pdf}
+    \label{fluxojira}
+    \caption[Fluxo de Desenvolvimento do Projeto]{Fluxo da Linha do Tempo no Jira Software}
+    \label{fig:enter-label}
+\end{figure}\pagebreak
 
-A integração da psicologia na plataforma ocorre através do uso intercambiável de características da psicoterapia online e da psicoterapia baseada na internet. Trazendo benefícios que tornaram as rodas de Terapia Comunitária Integrativa (TCI) mais acessíveis a um público mais amplo, superando barreiras geográficas e  de disponibilidade.
+    A linha do tempo do Jira organiza essa evolução de forma sistemática.
+    Cada \textit{story} concluída contribui para a evolução do projeto. Integrada à execução ágil, destaca marcos importantes. Uma narrativa dinâmica surge, revelando não apenas o caminho percorrido, mas também o potencial futuro da plataforma online.
 
-Na psicoterapia online, as pessoas podem participar de grupos terapêuticos remotamente, de forma síncrona, independentemente de sua localização física. Essa abordagem facilita a participação de pessoas com diferentes origens, culturas e rotinas, proporcionando flexibilidade de horários tanto para terapeutas quanto para participantes. Além disso, a plataforma facilita a criação de comunidades sociais virtuais, favorecendo uma maior conexão entre os participantes, o compartilhamento de recursos e apoio mútuo, gerando identificação e fortalecendo os laços comunitários para além das sessões online.
+    Essa abordagem prática e visual oferece uma compreensão clara do progresso e flexibilidade para ajustes ágeis, garantindo uma construção adaptável e alinhada às necessidades dos usuários da Terapia Comunitária Integrativa Online.
 
-A psicoterapia baseada na internet foi incorporada à plataforma por meio de uma página com vídeos acessíveis a qualquer momento. Esse recurso tem a intenção de enriquecer culturalmente e promover uma sensação de bem-estar sempre que o usuário desejar. Essa adição contribui para o reconhecimento da consciência pessoal durante momentos de tranquilidade e a manutenção de práticas exercidas nas rodas de TCI, proporcionando uma compreensão mais abrangente dos benefícios propostos por essa abordagem.
-
-A proposta de criar links automatizados do Google Meet para as Rodas de Terapia Comunitária Integrativa (TCI) facilita o gerenciamento das sessões pelos terapeutas. Eles podem pré-determinar datas e horários, sincronizando automaticamente com o Google Calendar. Isso otimiza o tempo do terapeuta, permitindo que se dedique a outras atividades enriquecedoras. Para os participantes interessados, a proposta oferece uma organização clara dos horários e datas das rodas de TCI, proporcionando autonomia na escolha das sessões terapêuticas que mais se adequam às suas rotinas universitárias.
-
-A abordagem da Terapia Comunitária Integrativa (TCI) promove um enfoque intercultural que celebra a diversidade e o envolvimento ativo dos membros da comunidade. Reconhecendo a relação intrínseca entre desenvolvimento humano e contextos culturais, a TCI conta com o papel adaptativo do terapeuta para manter o diálogo aberto e respeitoso, garantindo a qualidade das interações em grupo, mesmo em um ambiente online.
-
-Para as sessões online, a plataforma oferece uma experiência aprimorada, permitindo reunir pessoas para as rodas de psicoterapia comunitária integrativa por meio da tecnologia. O redirecionamento para a plataforma do Google Meet facilita a interação, criando um espaço virtual acolhedor onde os participantes podem compartilhar suas histórias e momentos, sem julgamentos.
-
-A possibilidade de compartilhar recursos multimídia, por meio de uma playlist de vídeos no YouTube conectada à plataforma, enriquece a experiência terapêutica. Essa tecnologia apoia visualmente o processo terapêutico, proporcionando bem-estar e valorização cultural em momentos além das sessões de terapia.
-
-Esses elementos, entrelaçados por representações que geram identificações, formam a base para um processo de cura significativo, potencializando mudanças individuais e comunitárias. A plataforma promove a compreensão e integração ativa das diversas dimensões culturais, valorizando a diversidade como essencial para o bem-estar emocional e social da comunidade.
-
-Os avanços na tecnologia e na comunicação têm permitido a inclusão de recursos que favorecem a manutenção da saúde mental. É importante ressaltar que a concepção de saúde é profundamente influenciada pela cultura, e a TCI reconhece e respeita essas diversas visões de mundo. Além disso, a Terapia Comunitária Integrativa defende a sintonia do indivíduo com as emoções e sentimentos despertados pelo contato, exigindo uma elevada auto-percepção. Incentiva a disposição para ouvir e compreender o outro, abrindo espaço para novas perspectivas e ressignificações daquilo que anteriormente era considerado imutável ou insuperável. Isso promove um ambiente propício ao crescimento pessoal e à construção de relações mais saudáveis, consolidando a visão integral da plataforma como um facilitador de bem-estar emocional e social.
+    
 
 
-\chapter{Engenharia Eletrônica na Implementação da Plataforma}
-\section{Exploração das contribuições específicas da Engenharia Eletrônica no desenvolvimento da plataforma.}
-\section{Destaque de tecnologias e recursos eletrônicos que podem ser aplicados.}
-
-\chapter{Considerações Éticas e Privacidade de Dados}
-
-Nos últimos anos, as inovações tecnológicas têm desempenhado um papel crucial na evolução dos serviços de saúde mental. A crescente demanda por atenção à saúde mental, aliada às possibilidades oferecidas pela tecnologia, resultou no desenvolvimento de novas modalidades de atendimento psicológico. O Conselho Federal de Psicologia (CFP), reconhecendo a importância desse avanço, regulamentou o atendimento psicoterápico remoto como uma prática profissional permitida e readequou a resolução para atender o contexto mundial atual.
-
-Os atendimentos psicológicos online têm se destacado pela atratividade técnica, ampliando o alcance dos serviços de atenção à saúde mental. Essa modalidade adapta o cuidado sem necessidade de contato presencial, garantindo resultados efetivos e observando os aspectos éticos e legais da psicologia.\cite{SIEGMUND} A Terapia Comunitária Integrativa (TCI), reconhecida pelo Ministério da Saúde como uma abordagem psicossocial avançada, também abraçou a era digital. O Polo Formador em TCI Afinando Vidas, diante dos desafios impostos pela pandemia, promoveu rodas experimentais online, resultando na criação de um protocolo replicado nacionalmente pela ABRATECOM que permitiu ressignificar a concepção de presença e cuidado, promovendo uma nova forma de conexão. \cite{SILVAeOTAVIANO}
-
-A convergência entre psicologia e tecnologia na plataforma desenvolvida evidencia a sinergia entre essas áreas. A interdisciplinaridade contribui para o aprimoramento mútuo, assegurando práticas éticas na Terapia Comunitária Integrativa online. Essa adaptação para o ambiente virtual demandou uma reinvenção na abordagem terapêutica, para continuar promovendo a construção de redes sociais solidárias, conexões e qualidade de vida, mas dessa vez sem o contato presencial. A plataforma foi desenvolvida com base nas APIs do Google, garantindo a segurança e privacidade necessárias para que os usuários possam explorar tranquilamente os benefícios que a TCI online promove. 
-
-A segurança dos dados torna-se uma prioridade na oferta de serviços psicológicos online, alinhando-se com a Lei Geral de Proteção de Dados (LGPD), legislação brasileira que regulamenta o tratamento de dados pessoais. Os principais princípios da \cite{LGPD} foram incorporados na construção da plataforma, incluindo a transparência no tratamento dos dados, o respeito à privacidade, a finalidade específica do uso dos dados, a necessidade e a segurança dos dados coletados. Essa medida foi adotada para garantir a conformidade com as normas de proteção de dados e para que a dinâmica dos grupos de TCI online continue a promover a diversidade, cultura, escuta ativa e respeito mútuo.
-
-Ao consultar as políticas do OAuth 2.0 do Google, foram adotadas medidas rigorosas para atender aos requisitos mínimos de segurança e privacidade. Durante a autenticação, apenas os escopos necessários foram solicitados, minimizando o acesso aos dados do usuário. A revogação manual do acesso é permitida pela plataforma, demonstrando mais um compromisso com a privacidade dos usuários.\cite{OAUTHSCOPES}
-
-Em resumo, a plataforma não só proporciona uma integração eficaz entre psicologia e tecnologia, mas também oferece uma resposta ética e centrada no usuário às demandas contemporâneas de saúde mental. A cuidadosa escolha das tecnologias implementadas assegura maior confidencialidade, privacidade e ética, moldando uma experiência que contribui positivamente para o bem-estar e desenvolvimento pessoal dos usuários. Isso destaca a plataforma como um avanço significativo no campo da Terapia Comunitária Integrativa online.
 
 
+\subsection{Ferramentas Principais do Projeto}
+
+\begin{enumerate}
+
+    \item\textbf{Inicialização do projeto utilizando Next.js}
+    
+    Para dar início ao projeto, foi optado pelo gerenciador de pacotes PNPM e pelo \textit{framework} Next.js. A inicialização do projeto foi realizada através do comando:
+
+\begin{verbatim}
+    pnpm create next-app@latest
+\end{verbatim}
+    
+    Na sequência, foram feitas seleções específicas, conforme ilustrado abaixo:
+    
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[scale=0.38]{latex/figuras/nextjs.pdf}
+    \caption[Ferramentas Principais do Projeto]{Sequência de comandos de configuração Next.js}
+    \label{fig:enter-label}
+\end{figure}
+
+    \item\textbf{Implementação da Camada de Comunicação TRPC entre Front-end e Back-end}
+    
+    A inclusão da camada exigiu a adição de pacotes por meio do comando:
+    
+\begin{small}
+\begin{verbatim}
+pnpm add @trpc/client @trpc/react-query @tanstack/react-query @trpc/server
+\end{verbatim}
+\end{small}
+
+    Posteriormente, uma pasta denominada \textbf{Server} foi criada na raiz do projeto. Essa pasta contém a lista de rotas, suas respectivas lógicas e a estrutura básica do TRPC.\\Dentro da pasta \textbf{App}, foi criada uma subpasta chamada \textbf{api}. No contexto do Next.js, essa pasta atua como \textit{endpoints} externos capazes de receber chamadas HTTP, expondo todas as rotas TRPC.\\ 
+    Para conectar o front-end às rotas TRPC e permitir o acesso às chamadas, foi necessário criar uma pasta chamada \verb|_trpc|, na estrutura do Next.js. Usando o \textit{App router}, as pastas com \verb|_| \textit{(underline)} na frente não são acessíveis externamente. Dentro desta pasta, foi estabelecido um provedor de TRPC que envolve a aplicação por completo, por meio do \textit{layout} da raiz e um arquivo de \textit{serverClient} que habilita componentes \textit{server side rendered} (SSR) a também utilizarem as rotas TRPC.
+    
+    \item\textbf{Camada de Segurança com a Utilização da Ferramenta Clerk}
+    
+    Para fortalecer a segurança, foi optado por integrar a ferramenta Clerk, conhecida por sua robusta estrutura de autenticação. A inclusão do Clerk foi realizada através do seguinte comando:
+    
+        \begin{verbatim}
+                    pnpm add @clerk/next.js
+        \end{verbatim}
+    Posteriormente, as seguintes etapas foram efetuadas:
+        \begin{enumerate}
+            \item Ajuste do arquivo trpc dentro da pasta \textit{server} para criar um novo tipo de procedimento protegido por autenticação.
+            \item Introdução de um \textit{middleware} na pasta raiz para determinar quais rotas devem ser públicas ou protegidas.
+            \item Adição de uma nova rota à pasta \textbf{api}
+            para receber \textit{webhooks} do sistema.
+            \item Implementação da página de criação de conta e de login.
+            \item Incorporação de um provedor ao \textit{layout} da raiz, garantindo que toda aplicação passe pelo processo de validação de rotas. Em casos de rotas protegidas, usuários não autenticados são redirecionados.
+        \end{enumerate}
+    
+    \item\textbf{Camada de Banco de Dados com o Uso do ORM Prisma e MySQL Hospedado no \textit{PlanetScale}}\\
+    
+    Na camada de banco de dados, foi escolhido o \textit{PlanetScale}, um banco de dados MySQL em nuvem com um plano gratuito adequado para projetos pequenos. Para estabelecer a conexão entre o serviço e o banco de dados, o Prisma foi selecionado como ORM, devido à sua praticidade e ferramentas como o Prisma Studio e Prisma Migrate, facilitando o acesso ao banco e a migração de tabelas, respectivamente.\\\\
+    A escolha do Prisma também levou em consideração a flexibilidade para futuras mudanças na escolha do banco, como a possibilidade de migrar para o \textit{PostgreSQL}. Nesse cenário, bastaria alterar o esquema no Prisma. Para incorporar o Prisma ao sistema, o seguinte comando foi executado:
+
+    \begin{verbatim}
+                    pnpm dlx prisma init
+    \end{verbatim}
+    
+    Em seguida, foi ajustado o esquema, gerado automaticamente, para garantir compatibilidade com o \textit{PlanetScale}. Adicionalmente, o banco de dados foi inserido no contexto do TRPC, possibilitando seu uso em qualquer procedimento TRPC.
+
+    \item\textbf{Camada de Análise de Dados de Uso com a Plataforma \textit{PostHog}}\\
+    
+    Para realizar a análise de uso, foi escolhido a ferramenta \textit{PostHog Cloud}, conhecida por registrar sessões do usuário, analisar eventos e monitorar fluxos de uso. A integração da biblioteca foi feita por meio do seguinte comando:
+    
+    \begin{verbatim}
+                    pnpm add posthog-js posthog-node
+    \end{verbatim}
+
+    Em seguida, criada a pasta \textbf{\_posthog} dentro da pasta \textbf{App}. Nela, foi inserido um provedor, o qual foi adicionado ao \textit{layout} da raiz, possibilitando que todo o sistema gere eventos.
+    
+    \item\textbf{Biblioteca de componentes ShadCN UI}\\
+    
+    A opção pela biblioteca de componentes ShadCN UI foi motivada por sua coleção de componentes reutilizáveis com configuração de estilo. Para incorporar a biblioteca, foi necessário executar o seguinte comando:
+    
+    \begin{verbatim}
+                    pnpm dlx shadcn-ui@latest init
+    \end{verbatim}    
+            
+    Além disso, realizadas as configurações necessárias, conforme apresentado a seguir:
+    
+    \begin{figure}[!ht]
+        \centering
+        \includegraphics[scale=0.38]{latex/figuras/shadcnui.pdf}
+        \caption[Ferramentas Principais do Projeto]{Sequência de comandos de configuração ShadCN UI}
+        \label{fig:enter-label}
+    \end{figure}
+
+    Nesse processo, pode-se notar o uso das pastas \verb|_lib| e \verb|_components| para manter essas pastas como privadas.
+
+    \item\textbf{Deploy com CI/CD configurado utilizando \textit{GitHub Actions} e Vercel}\\
+    
+    Com o projeto devidamente estruturado e as principais ferramentas configuradas, chegou o momento de realizar o primeiro \textit{deploy} na nuvem para iniciar as iterações. A escolha recaiu sobre a plataforma Vercel para hospedagem. O processo de \textit{deploy}, com o código no GitHub, foi simplificado, bastando conectar o projeto do GitHub à conta Vercel e inserir as variáveis de ambiente.
+    
+\end{enumerate}
+
+
+\subsection{Fluxo de separação de usuário e terapeuta}
+\subsection{Fluxo para novos grupos de terapia}
+\subsection{Fluxo de visualização dos grupos de terapia}
+\subsection{Playlist com videos recomendados para terapia}
+\subsection{Informações de data dos grupos as tabelas}
+\subsection{Liberação do OAuth do Google em produção}
