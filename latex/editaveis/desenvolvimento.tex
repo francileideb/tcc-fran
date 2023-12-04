@@ -2,26 +2,28 @@
 \chapter{Arquitetura da Plataforma}
 \section{Estrutura do Projeto}
 
+A plataforma online dedicada ao facilitamento do gerenciamento e acesso às sessões de Terapia Comunitária Integrativa apresenta uma estrutura de projeto (Apêndice \ref{appendix:estrutura}) meticulosamente desenvolvida em \textit{TypeScript, Next.js, Tailwind CSS} e integração com o \textit{OAuth} 2.0 do Google. A escolha do \textit{TypeScript} proporciona uma base sólida, introduzindo tipagem estática para fortalecer a robustez do código e facilitar a detecção precoce de erros durante o ciclo de desenvolvimento. A utilização do \textit{Next.js} contribui para a construção da aplicação de maneira escalável e ágil, aproveitando funcionalidades como \textit{Server-Side Rendering} (SSR) e \textit{Static Site Generation} (SSG). O \textit{Tailwind CSS}, com sua abordagem utilitária, simplifica a estilização, garantindo uma consistência visual refinada. A gestão de autenticação é confiada ao \textit{OAuth} 2.0 do Google, oferecendo uma camada segura para o controle de acesso à plataforma. Essa harmonia entre as tecnologias estabelece uma base sólida e eficiente para o desenvolvimento de uma aplicação web moderna e eficaz no contexto da Terapia Comunitária Integrativa.
+
 \subsection{Raiz do Projeto}
 \begin{itemize}
-\item \textbf{README.md:} Documentação do projeto em formato markdown.
-\item \textbf{pnpm-lock.yaml:} Arquivo de lock para gerenciar dependências com o gerenciador de pacotes pnpm.
-\item \textbf{middleware.ts:} Middleware utilizado para determinar se as paginas são de acesso publico ou se devem passar pela autenticação.
-\item \textbf{.env.local e .env:} Variáveis de ambiente
+\item \textbf{README.md:} Documentação do projeto em formato \textit{markdown}.
+\item \textbf{pnpm-lock.yaml:} Arquivo de bloqueio para o gerenciamento de dependências usando o gerenciador de pacotes pnpm.
+\item \textbf{middleware.ts:} \textit{Middleware} utilizado para determinar se as páginas são de acesso público ou requerem autenticação.
+\item \textbf{.env.local e .env:} Variáveis de ambiente.
 \item \textbf{.gitignore:} Lista de arquivos e pastas a serem ignorados pelo Git durante o versionamento.
 \item \textbf{.git:} Pasta do repositório Git, onde são armazenados os metadados do controle de versão.
 \item \textbf{package.json:} Arquivo de configuração do Node.js que descreve o projeto e suas dependências.
 \item \textbf{components.json:} Arquivo de configuração de componentes do ShadCN UI.
-\item \textbf{tsconfig.json:} Configuração do TypeScript para o projeto.
-\item \textbf{postcss.config.js:} Configuração do PostCSS para processamento de estilos.
-\item \textbf{.eslintrc.json:} Configurações do ESLint para linting e padronização de código.
-\item \textbf{next-env.d.ts:} Declarações de tipos do Next.js para TypeScript.
-\item \textbf{tailwind.config.ts:} Configurações específicas do Tailwind CSS.
-\item \textbf{next.config.js:} Arquivo de configuração do Next.js para customizações no ambiente.
-\item \textbf{public:} Pasta de arquivos publicos como imagens utilizadas no projeto.
+\item \textbf{tsconfig.json:} Configuração do \textit{TypeScript} para o projeto.
+\item \textbf{postcss.config.js:} Configuração do \textit{PostCSS} para o processamento de estilos.
+\item \textbf{.eslintrc.json:} Configurações do \textit{ESLint} para \textit{linting} e padronização de código.
+\item \textbf{next-env.d.ts:} Declarações de tipos do \textit{Next.js} para \textit{TypeScript}.
+\item \textbf{tailwind.config.ts:} Configurações específicas do \textit{Tailwind CSS}.
+\item \textbf{next.config.js:} Arquivo de configuração do \textit{Next.js} para personlizações no ambiente.
+\item \textbf{public:} Pasta de arquivos públicos, como imagens utilizadas no projeto.
 \item \textbf{app:} Pasta que contém componentes, páginas e recursos relacionados à estrutura geral do aplicativo. \ref{app}
 \item \textbf{prisma:} Pasta que contem as configurações do ORM Prisma. \ref{prisma}
-\item \textbf{server:} Pasta que contem a estrutura do servidor com TRPC, autenticação e banco de dados. \ref{server}
+\item \textbf{server:} Pasta que contém a estrutura do servidor com TRPC, autenticação e banco de dados. \ref{server}
 \end{itemize}
 
 \subsection{App}
@@ -31,22 +33,21 @@
 \item \textbf{sign-in:} Página de login.
 \item \textbf{terms-of-use:} Página de termos de uso.
 \item \textbf{privacy-policy:} Página de política de privacidade.
-\item \textbf{terapeuta:} Página do terapeuta e todos os seus componentes.
-\item \textbf{participante:} Pagina do participante e todos os seus componentes.
-
-\item \textbf{posthog:} Pasta de configuração e criação de um provider para o PostHog.
-\item \textbf{trpc:} Configuração de um cliente TRPC que possa ser utilizado tanto em componentes com renderização no servidor ou no cliente.
+\item \textbf{terapeuta:} Página do terapeuta e seus componentes associados.
+\item \textbf{participante:} Página do participante e seus componentes associados.
+\item \textbf{posthog:} Pasta de configuração e criação de um provedor para o \textit{PostHog}.
+\item \textbf{trpc:} Configuração de um cliente TRPC utilizado em componentes com renderização no servidor ou cliente.
 \item \textbf{lib:} Funções e utilitários compartilhados.
 \item \textbf{components:} Componentes reutilizáveis.
 
 
-\item \textbf{api:} Pasta para lidar com rotas da API.
+\item \textbf{api:} Pasta para gerenciar rotas da API.
 \begin{itemize}
 \item \textbf{trpc:} Rotas TRPC específicas.
-\item \textbf{clerk:} Possível roteamento para recursos relacionados ao Clerk.
+\item \textbf{clerk:} Possível roteamento para recursos relacionados ao \textit{Clerk}.
 \end{itemize}
 
-\item \textbf{layout.tsx:} Layout comum a todas as paginas, inclui o provider do PostHog, TRPC e de Autenticação.
+\item \textbf{layout.tsx:} \textit{Layout} comum a todas as páginas, incluindo os provedores do PostHog, TRPC e de Autenticação.
 \item \textbf{globals.css:} Arquivo de estilos globais.
 \item \textbf{favicon.ico:} Ícone exibido na barra de título do navegador.
 \end{itemize}
@@ -55,14 +56,14 @@
 \subsection{Prisma}
 \label{prisma}
 \begin{itemize}
-\item \textbf{schema.prisma:} Arquivo de definição de modelo para o Prisma ORM.
+\item \textbf{schema.prisma:} Arquivo de definição de modelo para o ORM Prisma.
 \end{itemize}
 
 \subsection{Server}
 \label{server}
 \begin{itemize}
 \item \textbf{routers:} Rotas relacionadas a diferentes recursos, como vídeos, grupos e usuários.
-\item \textbf{trpc.ts:} Configuração de chamadas publicas e protegidas na comunicação TRPC
+\item \textbf{trpc.ts:} Configuração de chamadas públicas e protegidas na comunicação TRPC.
 \item \textbf{index.ts:} Ponto de entrada do servidor.
 \item \textbf{db.ts:} Arquivo de configuração ou conexão com o banco de dados.
 \end{itemize}
@@ -77,11 +78,11 @@ No contexto do fluxo de autenticação, desde o redirecionamento do navegador at
 \begin{figure}[!ht] % ambiente usado para inserção de imagens
     \centering
     \includegraphics[scale=0.5]{latex/figuras/oauth.pdf}
-    \caption[Fluxo de autenticação OAuth 2.0 do Google]
+    \caption[Fluxo de Autenticação OAuth 2.0 do Google]
     {Fluxo de autenticação realizado pelo OAuth 2.0 do Google}
 \end{figure}
 
-\pagebreak Além disso, a abordagem dos escopos provenientes do protocolo OAuth 2.0 do Google destaca-se como um componente crucial da estratégia de permissões. A inclusão desses escopos na resposta do token desempenha um papel vital para acessar recursos específicos do projeto, alinhando as escolhas tecnológicas com a usabilidade da plataforma. Dessa forma, os usuários fornecem apenas o essencial para o acesso aos recursos e funcionalidades pertencentes ao projeto, contribuindo para uma experiência mais personalizada e segura. A seguir, apresenta-se a relação de escopos provenientes do protocolo OAuth 2.0 do Google, os quais foram empregados no desenvolvimento da plataforma \cite{OAUTHSCOPES}:
+Além disso, a abordagem dos escopos provenientes do protocolo OAuth 2.0 do Google destaca-se como um componente crucial da estratégia de permissões. A inclusão desses escopos na resposta do token desempenha um papel vital para acessar recursos específicos do projeto, alinhando as escolhas tecnológicas com a usabilidade da plataforma. Dessa forma, os usuários fornecem apenas o essencial para o acesso aos recursos e funcionalidades pertencentes ao projeto, contribuindo para uma experiência mais personalizada e segura. A seguir, apresenta-se a relação de escopos provenientes do protocolo OAuth 2.0 do Google, os quais foram empregados no desenvolvimento da plataforma \cite{OAUTHSCOPES}:
 
 \begin{itemize}
 \item \textit{\textbf{openId}} → Associação do usuário às suas informações pessoais presentes no Google
@@ -100,24 +101,22 @@ Assim, as escolhas tecnológicas incorporadas na implementação do \textit{OAut
 
 \section{Fluxo de Desenvolvimento do Projeto}
 
-    No processo de construção da plataforma para facilitar o acesso aos grupos de Terapia Comunitária Integrativa Online, \textit{stories} e \textit{epics} delimitam a narrativa do projeto. \textit{Stories} são tarefas detalhadas, enquanto \textit{epics} agrupam objetivos amplos. Esse fluxo inicia-se com a definição de \textit{epics}, desdobrando-se em \textit{stories}. Abaixo, é possível visualizar as etapas de desenvolvimento do projeto:\\
-\begin{figure}[!ht]
-    \centering
-    \includegraphics[scale=0.16]{latex/figuras/fluxojira.pdf}
-    \label{fluxojira}
-    \caption[Fluxo de Desenvolvimento do Projeto]{Fluxo da Linha do Tempo no Jira Software}
-    \label{fig:enter-label}
-\end{figure}\pagebreak
+    No processo de construção da plataforma para facilitar o acesso aos grupos de Terapia Comunitária Integrativa Online, \textit{stories} e \textit{epics} delimitam a narrativa do projeto. \textit{Stories} são tarefas detalhadas, enquanto \textit{epics} agrupam objetivos amplos. Esse fluxo inicia-se com a definição de \textit{epics}, desdobrando-se em \textit{stories}.
 
     A linha do tempo do Jira organiza essa evolução de forma sistemática.
     Cada \textit{story} concluída contribui para a evolução do projeto. Integrada à execução ágil, destaca marcos importantes. Uma narrativa dinâmica surge, revelando não apenas o caminho percorrido, mas também o potencial futuro da plataforma online.
 
-    Essa abordagem prática e visual oferece uma compreensão clara do progresso e flexibilidade para ajustes ágeis, garantindo uma construção adaptável e alinhada às necessidades dos usuários da Terapia Comunitária Integrativa Online.
-
+    Essa abordagem prática e visual oferece uma compreensão clara do progresso e flexibilidade para ajustes ágeis, garantindo uma construção adaptável e alinhada às necessidades dos usuários da Terapia Comunitária Integrativa Online.  Abaixo, é possível visualizar as etapas de desenvolvimento do projeto:
     
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[scale=0.16]{latex/figuras/fluxojira.pdf}
+    \label{fluxojira}
+    \caption[Linha do Tempo do Projeto]{Fluxo da Linha do Tempo no Jira Software}
+    \label{fig:enter-label}
+\end{figure}\pagebreak
 
-
-
+\pagebreak
 
 \subsection{Ferramentas Principais do Projeto}
 
@@ -136,7 +135,7 @@ Assim, as escolhas tecnológicas incorporadas na implementação do \textit{OAut
 \begin{figure}[!ht]
     \centering
     \includegraphics[scale=0.38]{latex/figuras/nextjs.pdf}
-    \caption[Ferramentas Principais do Projeto]{Sequência de comandos de configuração Next.js}
+    \caption[Comandos de Configuração Next.js]{Sequência de comandos de configuração Next.js}
     \label{fig:enter-label}
 \end{figure}
 
@@ -217,9 +216,59 @@ pnpm add @trpc/client @trpc/react-query @tanstack/react-query @trpc/server
 \end{enumerate}
 
 
-\subsection{Fluxo de separação de usuário e terapeuta}
-\subsection{Fluxo para novos grupos de terapia}
-\subsection{Fluxo de visualização dos grupos de terapia}
-\subsection{Playlist com videos recomendados para terapia}
-\subsection{Informações de data dos grupos as tabelas}
-\subsection{Liberação do OAuth do Google em produção}
+\subsection{Fluxo de Separação de Tipo de Usuário}
+    Na busca contínua por melhorias e otimizações do sistema, implementou-se um aperfeiçoamento no fluxo de cadastro de usuários para proporcionar uma experiência mais personalizada e eficiente. Para alcançar esse objetivo, foram realizadas as seguintes ações:
+\begin{enumerate}
+    % \item \textbf{Adição do \textit{Webhook} do Clerk para Criação de Novos Usuários:} foi implementado um \textit{webhook} do Clerk, que garante uma integração mais fluida e eficaz ao sistema, facilitando a entrada de informações e agilizando o cadastro.
+
+    \item \textbf{Adição de Página Inicial com Seleção de Tipo de Usuário:} uma página inicial foi desenvolvida, oferecendo aos usuários a capacidade de escolher entre \textit{\textbf{participante}} e \textit{\textbf{terapeuta}} logo após o processo de cadastro.
+    
+    \item \textbf{Adição de Página do Terapeuta com Validação de \textit{Redirect}}: a validação de redirecionamento garante que o usuário \textit{\textbf{terapeuta}} seja direcionado para a área apropriada do sistema, otimizando a navegação e a usabilidade.
+    
+    \item \textbf{Adição de Página do Participante com Validação de \textit{Redirect}}: a validação de redirecionamento garante que o usuário \textit{\textbf{participante}} seja direcionado para a área apropriada do sistema, otimizando a navegação e a usabilidade.
+\end{enumerate}
+
+\subsection{Fluxo de Criação de Novos Grupos de TCI Online}
+
+    Durante o desenvolvimento desse fluxo, foram implementadas melhorias para tornar o processo de uso mais intuitivo, eficiente e visualmente agradável, por meio dos seguintes passos:
+\begin{enumerate}
+    % \item \textbf{Ajuste de Cores dos Componentes:} refinamento das cores dos componentes essenciais, como botões e menus suspensos(\textit{dropdown}).
+    
+    \item \textbf{Adição do Formulário de Criação de Novo Grupo:} adição de um formulário dedicado para a criação de novos grupos, diretamente na página do terapeuta.
+    
+    \item \textbf{Indicação Visual do Andamento do Processo:} introdução de indicadores visuais através de \textit{toasts}, para manter os terapeutas informados sobre o andamento do processo de criação do grupo. Oferecendo feedback instantâneo sobre a conclusão bem-sucedida ou alerta em caso de algum problema.
+\end{enumerate}
+    
+\subsection{Fluxo de Visualização dos Grupos de TCI Online}
+    Aprimoramentos significativos no fluxo de visualização foram implementados. Essas melhorias visaram proporcionar uma navegação mais intuitiva e eficiente para participantes e terapeutas visualizarem os grupos de terapia comunitária online criados na plataforma.
+\begin{enumerate}
+    \item \textbf{Adição da Tabela de Todos os Grupos para Participantes:} foi introduzida a adição de uma tabela contendo todos os grupos disponíveis, proporcionando uma visão abrangente de todos os grupos de tci online disponíveis na plataforma.
+    \item \textbf{Adição da Tabela de Meus Grupos para Terapeutas:} foi implementada uma tabela dedicada aos \textit{\textbf{Meus Grupos}}. Essa adição permite que terapeutas visualizem de forma centralizada todos os grupos que gerenciam.
+\end{enumerate}
+
+\subsection{Fluxo da Adição de Sessão na Tela de Usuários}
+
+    Com o propósito de proporcionar uma experiência mais rica aos usuários da plataforma, foi realizada a criação da sessão \textit{Vídeos} em ambos os perfis, incorporando um acesso simplificado ao conteúdo visual de uma \textit{playlist} criada no YouTube.
+
+\begin{enumerate}
+    \item\textbf{Adição de Sessão na Tela de Usuários:} agora, ambos os tipos de usuários contam com a adição de uma sessão \textit{\textbf{Vídeos}} diretamente nos menus suspensos (\textit{dropdown}). Essa integração permite um acesso direto a uma \textit{playlist} no YouTube dentro da plataforma, oferecendo conteúdo visual complementar às atividades terapêuticas comunitárias integrativas.
+\end{enumerate}
+
+\subsection{Fluxo de Informações dos Grupos de TCI Online}
+
+    Visando aprimorar o acesso dos participantes e terapeutas aos grupos de terapia comunitária. Essas ações foram projetadas para fornecer uma compreensão mais clara e abrangente das atividades:
+
+\begin{enumerate}
+    \item\textbf{Adição de Informações na Página de Participantes:} implementação de informações cruciais, incluindo a data de início, o dia da semana e o horário de cada grupo de terapia comunitária. Essas informações agora estão disponíveis na tabela com todos os grupos de TCI online, disponíveis na plataforma.
+    \item\textbf{Adição de Informações na Página do Terapeuta:} foi realizada a adição de informações semelhantes a ação anterior, incluindo data de início, dia da semana e horário, agora apresentadas na tabela \textit{\textbf{Meus Grupos}}.
+\end{enumerate}
+
+\subsection{Fluxo de Liberação do OAuth 2.0 do Google}
+    Inicio do processo de liberação do OAuth 2.0 do Google para que a plataforma deixe o status \textbf{\textit{Em Desenvolvimento}} e avance para \textbf{\textit{Em Produção}}. Esta implementação atendeu às exigências estabelecidas pelo Google, envolvendo as seguintes ações:
+
+\begin{enumerate}
+    \item\textbf{Criação de um Domínio Próprio:} a medida foi adotada para conferir maior profissionalismo à plataforma online, estabelecendo uma base sólida para a segurança e integração com os serviços do Google.
+    \item\textbf{Adição da Página de Termos de Uso:} implementação e adição da página de Termos de Uso, Apêndice \ref{appendix:termos}, ocorrem no momento da criação da conta do usuário.
+    \item\textbf{Adição da Página de Política de Privacidade:} de maneira análoga, a implementação e adição da página de Política de Privacidade, Apêndice \ref{appendix:privacidade}, acontecem no momento da criação da conta do usuário.
+    \item\textbf{Processo de Validação do Google:} este é o ponto crucial do fluxo e envolve a realização do processo de validação do Google, assegurando que a integração com os serviços ocorra de maneira segura e em conformidade com as diretrizes estabelecidas.
+\end{enumerate}
